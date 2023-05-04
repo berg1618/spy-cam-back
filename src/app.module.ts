@@ -6,6 +6,7 @@ import { Usuario } from './usuario/entities/usuario.entity';
 import { PessoaModule } from './pessoa/pessoa.module';
 import { NotificacaoModule } from './notificacao/notificacao.module';
 import { Notificacao } from './notificacao/entities/notificacao.entity';
+import { Pessoa } from './pessoa/entities/pessoa.entity';
 
 dotenv.config();
 
@@ -18,7 +19,9 @@ dotenv.config();
       username: process.env.DBUSER,
       password: process.env.DBPASSWORD,
       database: 'spy_cam',
-      models: [],
+      models: [Usuario, Pessoa, Notificacao],
+      synchronize: true,
+      autoLoadModels: true,
     }),
     UsuarioModule,
     PessoaModule,
