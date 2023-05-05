@@ -1,13 +1,24 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { PessoaService } from './pessoa.service';
 import { Pessoa } from './entities/pessoa.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('pessoa')
 export class PessoaController {
   constructor(private pessoaService: PessoaService) {}
 
   @Post()
-  async cadastrarPessoa(@Body() pessoa: Pessoa) {
-    this.pessoaService.cadastrarPessoa(pessoa);
+  @UseInterceptors(FileInterceptor('fotos'))
+  async cadastrarPessoa(
+    @Body() pessoa: Pessoa,
+    @UploadedFile() fotos: Express.Multer.File,
+  ) {
+    this.pessoaService.cadastrarPessoa(pessoa, fotos);
   }
 }

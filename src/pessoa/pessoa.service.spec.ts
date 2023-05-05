@@ -35,7 +35,9 @@ describe('PessoaService', () => {
 
   describe('cadastrarPessoa()', () => {
     it('deve cadastrar uma pessoa', () => {
-      expect(service.cadastrarPessoa(pessoa)).toEqual({
+      const fotos = './arquivos/pessoas/foto.jpg';
+
+      expect(service.cadastrarPessoa(pessoa, fotos)).toEqual({
         dados: { fotos: 'in da car', nome_pessoa: 'claudo' },
         messagem: 'pessoa cadastrada com sucesso',
       });
