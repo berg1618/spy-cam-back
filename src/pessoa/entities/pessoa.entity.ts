@@ -9,7 +9,7 @@ import {
 import { Notificacao } from 'src/notificacao/entities/notificacao.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 
-@Table
+@Table({ tableName: 'pessoa' })
 export class Pessoa extends Model {
   @Column
   nome_pessoa: string;

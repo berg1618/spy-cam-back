@@ -15,7 +15,7 @@ dotenv.config();
     SequelizeModule.forRoot({
       dialect: 'mysql',
       host: 'localhost',
-      port: 3306,
+      port: parseInt(process.env.DBPORT),
       username: process.env.DBUSER,
       password: process.env.DBPASSWORD,
       database: 'spy_cam',
