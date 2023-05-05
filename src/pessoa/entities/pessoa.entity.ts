@@ -6,8 +6,8 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Notificacao } from 'src/notificacao/entities/notificacao.entity';
-import { Usuario } from 'src/usuario/entities/usuario.entity';
+import { Usuario } from '../../usuario/entities/usuario.entity';
+import { Notificacao } from '../../notificacao/entities/notificacao.entity';
 
 @Table({ tableName: 'pessoa' })
 export class Pessoa extends Model {

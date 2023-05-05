@@ -5,7 +5,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Pessoa } from 'src/pessoa/entities/pessoa.entity';
+import { Pessoa } from '../../pessoa/entities/pessoa.entity';
 
 @Table({ tableName: 'notificacao' })
 export class Notificacao extends Model {
