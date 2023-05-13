@@ -2,6 +2,7 @@ import { Repository } from 'sequelize-typescript';
 import { Usuario } from './entities/usuario.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import * as bcrypt from 'bcrypt';
 
 
 @Injectable()
@@ -13,6 +14,7 @@ export class UsuarioService {
 
     async cadastarUser(user) {
        try {
+        user.senha = await bcrypt.hash(user.senha, 8)
         await this.usuarioRepository.create(user)
        }
        catch (err) {
