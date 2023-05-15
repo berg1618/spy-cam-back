@@ -27,5 +27,6 @@ dotenv.config();
     PessoaModule,
     NotificacaoModule,
   ],
+ 
 })
 export class AppModule {}
