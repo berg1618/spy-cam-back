@@ -1,34 +1,51 @@
 import { Usuario } from './entities/usuario.entity';
-import { Body, Controller, Post, HttpException, HttpStatus, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  HttpException,
+  HttpStatus,
+  Res,
+} from '@nestjs/common';
 import { UsuarioService } from './usuarios.services';
 import { Response } from 'express';
-
-
+import { loginDto } from './dto/login.dto';
 
 @Controller('usuarios')
 export class UsuariosController {
-    constructor(private usuarioService: UsuarioService) {}
+  constructor(private usuarioService: UsuarioService) {}
 
-  @Post()
-  async CadastrarPessoa(@Body() usuario: Usuario, @Res() res: Response): Promise<any> {
+  @Post('/cadastro')
+  async CadastrarPessoa(
+    @Body() usuario: Usuario,
+    @Res() res: Response,
+  ): Promise<any> {
     try {
-      // se e vazio
       if (Object.values(usuario).length == 0) {
-        return <any> res.status(400).json({msg: "corpo da requisicao nao pode ser null"})
+        return <any>(
+          res.status(400).json({ msg: 'corpo da requisição não pode ser null' })
+        );
       }
 
-      // verificar se o usuario ja existe
-      const check = await this.usuarioService.userExists(usuario)
+      const check = await this.usuarioService.userExists(usuario);
       if (check) {
-        return <any> res.status(400).json({msg: "esse nome de usuario já existe"})
+        return <any>(
+          res.status(400).json({ msg: 'esse nome de usuario já existe' })
+        );
       }
 
-      // tudo ok, cadastrar
-      this.usuarioService.cadastarUser(usuario);
-      return <any> res.status(200).json({msg: "usuario cadastrado"})
+      this.usuarioService.cadastrarUser(usuario);
+      return <any>res.status(200).json({ msg: 'usuario cadastrado' });
+    } catch (err) {
+      throw new HttpException(
+        'erro no servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-    catch (err) {
-      throw new HttpException('erro no servidor', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  }
+
+  @Post('login')
+  login(@Body() user: loginDto) {
+    this.usuarioService.login(user);
   }
 }

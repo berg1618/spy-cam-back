@@ -11,7 +11,7 @@ export class UsuarioService {
     private usuarioRepository: Repository<Usuario>,
   ) {}
 
-  async cadastarUser(user) {
+  async cadastrarUser(user) {
     try {
       user.senha = await bcrypt.hash(user.senha, 8);
       await this.usuarioRepository.create(user);
@@ -20,15 +20,31 @@ export class UsuarioService {
     }
   }
 
-  // verificar se o usuario q querem cadastrar, ja existe
   async userExists(user) {
     try {
-      return await this.usuarioRepository.findOne({
+      const userExists = await this.usuarioRepository.findOne({
         attributes: ['id', 'nome'],
         where: { nome: user.nome },
       });
+      return userExists;
     } catch (err) {
       throw new Error(`não foi posível realizar a operacao ${err.message}`);
+    }
+  }
+
+  async login(user) {
+    try {
+      const data = await this.usuarioRepository.findOne({
+        attributes: ['email'],
+        where: { nome: user.email },
+      });
+      if (data) {
+        bcrypt.compare(user.senha, data.senha, function (err, res) {
+          return 'login realizado com sucesso';
+        });
+      }
+    } catch (err) {
+      throw new Error(`Acesso negado. ${err.message}`);
     }
   }
 }
