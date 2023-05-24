@@ -9,11 +9,16 @@ import {
 } from '@nestjs/common';
 import { UsuarioService } from './usuarios.services';
 import { Response } from 'express';
-import { loginDto } from './dto/login.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('usuarios')
 export class UsuariosController {
   constructor(private usuarioService: UsuarioService) {}
+
+  @Post('/login')
+  login(@Body() user: LoginDto) {
+    return this.usuarioService.login(user);
+  }
 
   @Post('/cadastro')
   async CadastrarPessoa(
@@ -42,10 +47,5 @@ export class UsuariosController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-  }
-
-  @Post('login')
-  login(@Body() user: loginDto) {
-    this.usuarioService.login(user);
   }
 }

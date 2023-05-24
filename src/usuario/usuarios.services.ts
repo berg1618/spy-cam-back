@@ -1,8 +1,9 @@
 import { Repository } from 'sequelize-typescript';
 import { Usuario } from './entities/usuario.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcryptjs';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -11,6 +12,20 @@ export class UsuarioService {
     private usuarioRepository: Repository<Usuario>,
   ) {}
 
+  async login(user: LoginDto) {
+    try {
+      const data = await this.usuarioRepository.findOne({
+        attributes: ['email'],
+        where: { email: user.email },
+      });
+      bcrypt.compare(user.senha, data.senha, function (err, res) {
+        return 'login realizado com sucesso';
+      });
+      return 'Erro no login';
+    } catch (err) {
+      throw new UnprocessableEntityException(`Acesso negado. ${err.message}`);
+    }
+  }
   async cadastrarUser(user) {
     try {
       user.senha = await bcrypt.hash(user.senha, 8);
@@ -29,22 +44,6 @@ export class UsuarioService {
       return userExists;
     } catch (err) {
       throw new Error(`não foi posível realizar a operacao ${err.message}`);
-    }
-  }
-
-  async login(user) {
-    try {
-      const data = await this.usuarioRepository.findOne({
-        attributes: ['email'],
-        where: { nome: user.email },
-      });
-      if (data) {
-        bcrypt.compare(user.senha, data.senha, function (err, res) {
-          return 'login realizado com sucesso';
-        });
-      }
-    } catch (err) {
-      throw new Error(`Acesso negado. ${err.message}`);
     }
   }
 }
