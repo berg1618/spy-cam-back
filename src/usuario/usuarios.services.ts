@@ -1,6 +1,10 @@
 import { Repository } from 'sequelize-typescript';
 import { Usuario } from './entities/usuario.entity';
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
@@ -14,14 +18,9 @@ export class UsuarioService {
 
   async login(user: LoginDto) {
     try {
-      const data = await this.usuarioRepository.findOne({
-        attributes: ['email'],
+      return await this.usuarioRepository.findOne({
         where: { email: user.email },
       });
-      bcrypt.compare(user.senha, data.senha, function (err, res) {
-        return 'login realizado com sucesso';
-      });
-      return 'Erro no login';
     } catch (err) {
       throw new UnprocessableEntityException(`Acesso negado. ${err.message}`);
     }
