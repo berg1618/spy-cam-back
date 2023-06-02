@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcryptjs';
-import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -16,10 +15,10 @@ export class UsuarioService {
     private usuarioRepository: Repository<Usuario>,
   ) {}
 
-  async login(user: LoginDto) {
+  async login(userEmail): Promise<Usuario | undefined> {
     try {
       return await this.usuarioRepository.findOne({
-        where: { email: user.email },
+        where: { email: userEmail },
       });
     } catch (err) {
       throw new UnprocessableEntityException(`Acesso negado. ${err.message}`);

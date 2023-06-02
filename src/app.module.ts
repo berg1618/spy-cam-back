@@ -24,10 +24,10 @@ dotenv.config();
       synchronize: true,
       autoLoadModels: true,
     }),
-    AuthModule,
     UsuarioModule,
     PessoaModule,
     NotificacaoModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
