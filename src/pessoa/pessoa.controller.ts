@@ -2,12 +2,12 @@ import {
   Body,
   Controller,
   Post,
-  UploadedFile,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { PessoaService } from './pessoa.service';
 import { Pessoa } from './entities/pessoa.entity';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 
@@ -17,7 +17,9 @@ export class PessoaController {
 
   @Post()
   @UseInterceptors(
-    FileInterceptor('fotos', {
+    FilesInterceptor('fotos',
+    5,
+     {
       storage: diskStorage({
         destination: './arquivos/pessoas',
 
@@ -34,9 +36,15 @@ export class PessoaController {
   )
   async cadastrarPessoa(
     @Body() pessoa: Pessoa,
-    @UploadedFile()
-    fotos: Express.Multer.File,
+    @UploadedFiles()
+    fotos: Array<Express.Multer.File>,
   ) {
-    this.pessoaService.cadastrarPessoa(pessoa, fotos.path);
+  
+    let arrayFotos: string = ""
+    
+    fotos.forEach((foto) => {
+      arrayFotos += foto.path + ";"
+    })
+    this.pessoaService.cadastrarPessoa(pessoa, arrayFotos);
   }
 }

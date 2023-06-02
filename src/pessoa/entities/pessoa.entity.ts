@@ -1,6 +1,7 @@
 import {
   BelongsTo,
   Column,
+  DataType,
   ForeignKey,
   HasMany,
   Model,
@@ -14,7 +15,7 @@ export class Pessoa extends Model {
   @Column
   nome_pessoa: string;
 
-  @Column
+  @Column({type: DataType.TEXT})
   fotos: string;
 
   @ForeignKey(() => Usuario)
