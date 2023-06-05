@@ -2,8 +2,6 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { Pessoa } from './entities/pessoa.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { Repository } from 'sequelize-typescript';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 
 @Injectable()
 export class PessoaService {

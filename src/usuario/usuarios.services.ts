@@ -1,6 +1,10 @@
 import { Repository } from 'sequelize-typescript';
 import { Usuario } from './entities/usuario.entity';
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcryptjs';
 
@@ -11,7 +15,16 @@ export class UsuarioService {
     private usuarioRepository: Repository<Usuario>,
   ) {}
 
-  async cadastarUser(user) {
+  async login(userEmail): Promise<Usuario | undefined> {
+    try {
+      return await this.usuarioRepository.findOne({
+        where: { email: userEmail },
+      });
+    } catch (err) {
+      throw new UnprocessableEntityException(`Acesso negado. ${err.message}`);
+    }
+  }
+  async cadastrarUser(user) {
     try {
       user.senha = await bcrypt.hash(user.senha, 8);
       await this.usuarioRepository.create(user);
@@ -20,13 +33,13 @@ export class UsuarioService {
     }
   }
 
-  // verificar se o usuario q querem cadastrar, ja existe
   async userExists(user) {
     try {
-      return await this.usuarioRepository.findOne({
+      const userExists = await this.usuarioRepository.findOne({
         attributes: ['id', 'nome'],
         where: { nome: user.nome },
       });
+      return userExists;
     } catch (err) {
       throw new Error(`não foi posível realizar a operacao ${err.message}`);
     }

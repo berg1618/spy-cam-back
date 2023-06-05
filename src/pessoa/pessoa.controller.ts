@@ -17,9 +17,7 @@ export class PessoaController {
 
   @Post()
   @UseInterceptors(
-    FilesInterceptor('fotos',
-    5,
-     {
+    FilesInterceptor('fotos', 5, {
       storage: diskStorage({
         destination: './arquivos/pessoas',
 
@@ -39,12 +37,11 @@ export class PessoaController {
     @UploadedFiles()
     fotos: Array<Express.Multer.File>,
   ) {
-  
-    let arrayFotos: string = ""
-    
+    let arrayFotos: string = '';
+
     fotos.forEach((foto) => {
-      arrayFotos += foto.path + ";"
-    })
+      arrayFotos += foto.path + ';';
+    });
     this.pessoaService.cadastrarPessoa(pessoa, arrayFotos);
   }
 }
