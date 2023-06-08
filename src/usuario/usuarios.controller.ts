@@ -9,11 +9,13 @@ import {
 } from '@nestjs/common';
 import { UsuarioService } from './usuarios.services';
 import { Response } from 'express';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('usuarios')
 export class UsuariosController {
   constructor(private usuarioService: UsuarioService) {}
 
+  @Public()
   @Post('/cadastro')
   async CadastrarPessoa(
     @Body() usuario: Usuario,
