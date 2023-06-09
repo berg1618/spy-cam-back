@@ -1,7 +1,7 @@
 import cv2
-from datetime import datetime, time
+import os
 
-cadastrar = True
+
 
 haar_cascade_xml = 'haarcascade_frontalface_alt2.xml'
 
@@ -27,14 +27,19 @@ while not cv2.waitKey(20) & 0xFF == ord('q'):
         if len(face_capture) > 0:
             rosto = frame[y:y+h, x:x+w]
 
-            data = datetime.now()
-            data_str = str(data)
-            
-            if cadastrar:
-                print("peguei um")
-                cv2.imwrite("./fotos_teste/" + data_str + ".png", rosto)
-                cadastrar = False
+            cv2.imwrite("./fotos_teste/ft.png" , rosto)
+        
 
 
     # cv2.imshow('gray', gray)
     cv2.imshow('color', frame)
+capture.release()
+cv2.destroyAllWindows()
+#apagar a ft depois do reconhecimento facial
+
+caminho_arquivo = './fotos_teste/ft.png'
+if os.path.exists(caminho_arquivo):
+    os.remove(caminho_arquivo)
+    print("Arquivo excluído com sucesso.")
+else:
+    print("O arquivo não existe.")
