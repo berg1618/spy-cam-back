@@ -7,7 +7,7 @@ import {
   HttpStatus,
   Res,
 } from '@nestjs/common';
-import { UsuarioService } from './usuarios.services';
+import { UsuarioService } from './usuario.services';
 import { Response } from 'express';
 import { Public } from 'src/auth/decorators/public.decorator';
 
