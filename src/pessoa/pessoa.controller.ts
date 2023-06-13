@@ -10,6 +10,8 @@ import { Pessoa } from './entities/pessoa.entity';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
+import { CurrentUser } from '../usuario/usuario.guard';
+import { Usuario } from '../usuario/entities/usuario.entity';
 
 @Controller('pessoa')
 export class PessoaController {
@@ -36,12 +38,13 @@ export class PessoaController {
     @Body() pessoa: Pessoa,
     @UploadedFiles()
     fotos: Array<Express.Multer.File>,
+    @CurrentUser() usuario: Usuario,
   ) {
     let arrayFotos: string = '';
 
     fotos.forEach((foto) => {
       arrayFotos += foto.path + ';';
     });
-    this.pessoaService.cadastrarPessoa(pessoa, arrayFotos);
+    this.pessoaService.cadastrarPessoa(pessoa, arrayFotos, usuario);
   }
 }
