@@ -8,6 +8,7 @@ import { NotificacaoModule } from './notificacao/notificacao.module';
 import { Notificacao } from './notificacao/entities/notificacao.entity';
 import { Pessoa } from './pessoa/entities/pessoa.entity';
 import { AuthModule } from './auth/auth.module';
+import { UsuarioPessoaModule } from './usuario_pessoa/usuario_pessoa.module';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ dotenv.config();
     PessoaModule,
     NotificacaoModule,
     AuthModule,
+    UsuarioPessoaModule,
   ],
 })
 export class AppModule {}
