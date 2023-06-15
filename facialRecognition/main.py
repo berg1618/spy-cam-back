@@ -1,8 +1,6 @@
 import cv2
 import os
 
-
-
 haar_cascade_xml = 'haarcascade_frontalface_alt2.xml'
 
 faceClassifier = cv2.CascadeClassifier(haar_cascade_xml)
