@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import cv2
 import os
 
@@ -35,9 +36,9 @@ capture.release()
 cv2.destroyAllWindows()
 #apagar a ft depois do reconhecimento facial
 
-caminho_arquivo = './fotos_teste/ft.png'
-if os.path.exists(caminho_arquivo):
-    os.remove(caminho_arquivo)
-    print("Arquivo excluído com sucesso.")
-else:
-    print("O arquivo não existe.")
+# caminho_arquivo = './fotos_teste/ft.png'
+# if os.path.exists(caminho_arquivo):
+#     os.remove(caminho_arquivo)
+#     print("Arquivo excluído com sucesso.")
+# else:
+#     print("O arquivo não existe.")
