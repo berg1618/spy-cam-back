@@ -1,1 +1,0 @@
-# funcao que faz o reconhecimento dos rostos
