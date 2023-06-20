@@ -18,13 +18,6 @@ export class Pessoa extends Model {
   @Column({ type: DataType.TEXT })
   fotos: string;
 
-  @ForeignKey(() => Usuario)
-  @Column
-  id_usuario: number;
-
-  @BelongsTo(() => Usuario)
-  usuario: Usuario;
-
   @HasMany(() => Notificacao)
   noticacoes: Notificacao[];
 }
