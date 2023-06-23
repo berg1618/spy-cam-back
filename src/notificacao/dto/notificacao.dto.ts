@@ -1,9 +1,9 @@
-import { IsString, IsEmail, IsNumber } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 
 export class CreateNotificacaoDto {
-    @IsString()
-    mensagem: string;
+  @IsString()
+  mensagem: string;
 
-    @IsNumber()
-    pessoa_id: number;
+  @IsNumber()
+  pessoa_id;
 }
