@@ -29,4 +29,3 @@ def recognition(pessoa_conhecida: str, img_camera: str):
     
     except:
         print("deu algum erro!!!!")
-

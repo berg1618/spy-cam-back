@@ -1,9 +1,14 @@
 import cv2
 import os
 
+from recognition.recognition import recognition
+
 haar_cascade_xml = 'haarcascade_frontalface_alt2.xml'
 
 faceClassifier = cv2.CascadeClassifier(haar_cascade_xml)
+
+# x = recognition('./val.jpg', '../arquivos/pessoas/1.jpg')
+# print(x)
 
 # iniciar a camera
 capture = cv2.VideoCapture(0)
@@ -33,11 +38,11 @@ while not cv2.waitKey(20) & 0xFF == ord('q'):
     cv2.imshow('color', frame)
 capture.release()
 cv2.destroyAllWindows()
-#apagar a ft depois do reconhecimento facial
+# #apagar a ft depois do reconhecimento facial
 
-caminho_arquivo = './fotos_teste/ft.png'
-if os.path.exists(caminho_arquivo):
-    os.remove(caminho_arquivo)
-    print("Arquivo excluído com sucesso.")
-else:
-    print("O arquivo não existe.")
+# caminho_arquivo = './fotos_teste/ft.png'
+# if os.path.exists(caminho_arquivo):
+#     os.remove(caminho_arquivo)
+#     print("Arquivo excluído com sucesso.")
+# else:
+#     print("O arquivo não existe.")
