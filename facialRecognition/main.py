@@ -1,14 +1,20 @@
+#!/usr/bin/python3
 import cv2
 import os
+import threading
+import time
 
-from recognition.recognition import recognition
+from recognition.recognition import Recognition
+
+processo_ativo = False
+
+# instanciar a classe com o metodo de reconhecimento
+# esta classe contem o atributo q me retornara o resultado
+recog = Recognition()
 
 haar_cascade_xml = 'haarcascade_frontalface_alt2.xml'
 
 faceClassifier = cv2.CascadeClassifier(haar_cascade_xml)
-
-# x = recognition('./val.jpg', '../arquivos/pessoas/1.jpg')
-# print(x)
 
 # iniciar a camera
 capture = cv2.VideoCapture(0)
@@ -22,7 +28,7 @@ while not cv2.waitKey(20) & 0xFF == ord('q'):
 
     face = faceClassifier.detectMultiScale(gray)
 
-    # criar retangulo que detecta rosto
+    #criar retangulo que detecta rosto
     for x, y, w, h in face:
         face_capture = cv2.rectangle(frame, (x, y), (x + w, y + h), (0,0,255), 2)
 
@@ -30,19 +36,31 @@ while not cv2.waitKey(20) & 0xFF == ord('q'):
         if len(face_capture) > 0:
             rosto = frame[y:y+h, x:x+w]
 
-            cv2.imwrite("./fotos_teste/ft.png" , rosto)
+            cv2.imwrite("./fotos_teste/ft.jpg" , rosto)
+           
         
+    if processo_ativo == False:
+        processo_ativo = True
+        time.sleep(1)
+        thread = threading.Thread(target=recog.recognition, args=['./fotos_teste/ft.jpg', './clau.jpeg']).start()
+        print("reconheceu")
+
+        
+    if recog.result != None:
+        print(">>", recog.result)
+        #apagar a ft depois do reconhecimento facial
+
+        caminho_arquivo = './fotos_teste/ft.png'
+        if os.path.exists(caminho_arquivo):
+            os.remove(caminho_arquivo)
+            print("Arquivo excluído com sucesso.")
+        else:
+            print("O arquivo não existe.")
+        
+        processo_ativo = False
 
 
     # cv2.imshow('gray', gray)
     cv2.imshow('color', frame)
 capture.release()
 cv2.destroyAllWindows()
-# #apagar a ft depois do reconhecimento facial
-
-# caminho_arquivo = './fotos_teste/ft.png'
-# if os.path.exists(caminho_arquivo):
-#     os.remove(caminho_arquivo)
-#     print("Arquivo excluído com sucesso.")
-# else:
-#     print("O arquivo não existe.")
