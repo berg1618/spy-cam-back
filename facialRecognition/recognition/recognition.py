@@ -13,8 +13,6 @@ class Recognition:
             img_pessoa = fr.load_image_file(pessoa_conhecida)
             # imgClaudio = cv2.cvtColor(imgClaudio, cv2.COLOR_BGR2RGB)
 
-
-
             # a foto capturada pela camera
             img_cam = fr.load_image_file(img_camera)
             # imgCamera = cv2.cvtColor(imgCamera, cv2.COLOR_BGR2RGB)
@@ -34,7 +32,15 @@ class Recognition:
             self.result = compare[0]
     
         except:
-            print("erro")
+            # nem sempre o metodo conseguirá reconhecer que se trata de um rosto 
+            # logo de primeira. Isso pode causar um erro.
+            # usando try e except tratamos esse erro retornando 0.
+            # a ideia é que enquanto o valor de retorno for 0 ou None esse metodo
+            # deve ser executado, até que ele me retorne algum valor como True ou False.
+
+            # so salvamos no banco se o metodo estiver me retornando um valor
+            # diferente de 0 ou None
+           self.result = 0
 
 
         
