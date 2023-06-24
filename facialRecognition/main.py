@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 import cv2
-import os
 import threading
 import time
-from datetime import datetime
+import tempfile
 
 from recognition.recognition import Recognition
 
@@ -11,6 +10,7 @@ from recognition.recognition import Recognition
 PROCESSO_ATIVO = False
 HORA_DETECCAO = 0
 CADASTRAR_ROSTO = True
+ARQUIVO_TEMPORARIO = None
 
 
 # instanciar a classe com o metodo de reconhecimento
@@ -21,77 +21,76 @@ haar_cascade_xml = 'haarcascade_frontalface_alt2.xml'
 
 faceClassifier = cv2.CascadeClassifier(haar_cascade_xml)
 
-# iniciar a camera
+# # iniciar a camera
 capture = cv2.VideoCapture(0)
 capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
 while not cv2.waitKey(20) & 0xFF == ord('q'):
-    ret, frame = capture.read()
+    try:
 
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        time.sleep(0.5)
+        HORA_DETECCAO += 1
 
-    face = faceClassifier.detectMultiScale(gray)
+        ret, frame = capture.read()
 
-    #criar retangulo que detecta rosto
-    for x, y, w, h in face:
-        face_capture = cv2.rectangle(frame, (x, y), (x + w, y + h), (0,0,255), 2)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # detectar um rosto, chamar a função de fazer reconhecimento
-        if len(face_capture) > 0:
-            rosto = frame[y:y+h, x:x+w]
+        face = faceClassifier.detectMultiScale(gray)
 
-            cv2.imwrite("./fotos_teste/ft.jpg" , rosto)
-           
-        
-    if PROCESSO_ATIVO == False:
-        print('vai')
-        PROCESSO_ATIVO = True
-        time.sleep(1)
-        thread = threading.Thread(target=recog.recognition, args=['./fotos_teste/ft.jpg', './clau.jpeg']).start()
- 
-        
-    if recog.result != None:
+        #criar retangulo que detecta rosto
+        for x, y, w, h in face:
+            face_capture = cv2.rectangle(frame, (x, y), (x + w, y + h), (0,0,255), 2)
 
-        if recog.result != 0 and CADASTRAR_ROSTO == True:
-        
-            HORA_DETECCAO = datetime.now()
+            # detectar um rosto, chamar a função de fazer reconhecimento
+            if len(face_capture) > 0:
+                rosto = frame[y:y+h, x:x+w]
+
+                # cv2.imwrite("./fotos_teste/ft.jpg" , rosto)
+
+                with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as temp_file:
+                    ARQUIVO_TEMPORARIO = temp_file.name
+
+                    # Salva a imagem do rosto no arquivo temporário
+                    cv2.imwrite(ARQUIVO_TEMPORARIO, rosto)
             
-            print(">>", recog.result)
-            CADASTRAR_ROSTO = False # so cadastraremos um novo rosto daqui a 10 min por ex.
+            
+        if PROCESSO_ATIVO == False:
+            print('vai')
+            PROCESSO_ATIVO = True
+            thread = threading.Thread(target=recog.recognition, args=['./clau.jpeg', ARQUIVO_TEMPORARIO]).start()
+    
+            
+        if recog.result != None:
+            if recog.result != 10 and CADASTRAR_ROSTO == True:
+                
+                print(">>", recog.result)
+                CADASTRAR_ROSTO = False # so cadastraremos um novo rosto daqui a 10 min por ex.
 
-            # chamar a funcao que salvará no banco
-            # salvarNotificacao("fulano entrou no carro")
+                # chamar a funcao que salvará no banco
+                # salvarNotificacao("fulano entrou no carro")
 
-            #apagar a ft depois do reconhecimento facial
-            caminho_arquivo = './fotos_teste/ft.png'
-            if os.path.exists(caminho_arquivo):
-                os.remove(caminho_arquivo)
-                print("Arquivo excluído com sucesso.")
+                recog.result = None # lipar esse resultado para um novo
+
+            
             else:
-                print("O arquivo não existe.")
-        
-        else:
-            # caso o resultado seja 0 significa que o metodo
-            # nao conseguiu fazer o reconhecimento
-            # entao queremos executar o metodo mais vezes
+                # caso o resultado seja 10 significa que o metodo
+                # nao conseguiu fazer o reconhecimento
+                # entao queremos executar o metodo mais vezes
+                PROCESSO_ATIVO = False
+
+
+        # virificar se ja passaram os 10 min para poder
+        # fazer uma nova identificação
+        if HORA_DETECCAO > 10:
             PROCESSO_ATIVO = False
+            CADASTRAR_ROSTO = True
+            HORA_DETECCAO = 0
 
+        # cv2.imshow('gray', gray)
+        cv2.imshow('color', frame)
+    except:
+        print("erro")
 
-    # print(recog.result)
-
-    # virificar se ja passaram os 10 min para poder
-    # fazer uma nova identificação
-    hora_atual = datetime.now()
-    x = str(hora_atual - (HORA_DETECCAO or datetime.now()))[5:]
-    hour = float(x)
-    print(hour)
-    if hour > 10:
-        CADASTRAR_ROSTO = True
-        PROCESSO_ATIVO = False
-
-
-    # cv2.imshow('gray', gray)
-    cv2.imshow('color', frame)
 capture.release()
 cv2.destroyAllWindows()
