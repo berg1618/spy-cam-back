@@ -14,7 +14,7 @@ export class Notificacao extends Model {
 
   @ForeignKey(() => Pessoa)
   @Column
-  id_pessoa: number;
+  pessoa_id: number;
 
   @BelongsTo(() => Pessoa)
   pessoa: Pessoa;

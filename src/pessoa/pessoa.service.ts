@@ -20,8 +20,8 @@ export class PessoaService {
       const criado = await this.pessoaRepository.create(dados);
 
       this.usuarioPessoaRepository.create({
-        id_pessoa: criado.id,
-        id_usuario: usuario.sub,
+        pessoa_id: criado.id,
+        usuario_id: usuario.sub,
       });
 
       return {
