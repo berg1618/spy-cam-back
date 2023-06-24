@@ -12,14 +12,14 @@ import { Usuario } from '../../usuario/entities/usuario.entity';
 export class Usuario_Pessoa extends Model {
   @ForeignKey(() => Usuario)
   @Column
-  id_usuario: number;
+  usuario_id: number;
 
   @BelongsTo(() => Usuario)
   usuario: Usuario;
 
   @ForeignKey(() => Pessoa)
   @Column
-  id_pessoa: number;
+  pessoa_id: number;
 
   @BelongsTo(() => Pessoa)
   pessoa: Pessoa;

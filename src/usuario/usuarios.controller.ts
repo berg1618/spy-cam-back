@@ -17,10 +17,7 @@ export class UsuariosController {
 
   @Public()
   @Post('/cadastro')
-  async CadastrarPessoa(
-    @Body() usuario: Usuario,
-    @Res() res: Response,
-  ): Promise<any> {
+  async CadastrarPessoa(@Body() usuario, @Res() res: Response): Promise<any> {
     try {
       if (Object.values(usuario).length == 0) {
         return <any>(
@@ -30,9 +27,7 @@ export class UsuariosController {
 
       const check = await this.usuarioService.userExists(usuario);
       if (check) {
-        return <any>(
-          res.status(400).json({ msg: 'esse nome de usuario já existe' })
-        );
+        return <any>res.status(400).json({ msg: 'esse usuário já existe' });
       }
 
       this.usuarioService.cadastrarUser(usuario);

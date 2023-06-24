@@ -7,13 +7,11 @@ import { NotificacaoService } from './notificacao.service';
 export class NotificacaoController {
   constructor(private notificacaoService: NotificacaoService) {}
 
-  @Public()
   @Get()
   async listarRegistro() {
     return this.notificacaoService.listarRegistros();
   }
 
-  @Public()
   @Post('/cadastro')
   async CadastrarNotificacao(
     @Body() notificacao: CreateNotificacaoDto,
