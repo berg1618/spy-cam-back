@@ -1,10 +1,13 @@
 # funcao que faz o reconhecimento dos rostos
 import face_recognition as fr
 import cv2
+from recognition.bd import BD
+# from bd import BD
 
 class Recognition:
     def __init__(self):
         self.result = None
+        self.fotos_bd = BD()
 
     def recognition(self, pessoa_conhecida: str, img_camera: str):
         try:
@@ -42,4 +45,29 @@ class Recognition:
            self.result = 10
 
 
-        
+    # POR ENQUANTO PEGAR APEBAS A ULTIMA FOTO REGISTRADA
+    # DEPOIS TENTANTAR FAZER A COMPARAÇÃO COM TODOAS AS FOTOS
+    def for_each_photo(self, img_cam):
+        pessoas = self.fotos_bd.getPhotos() # [(id, nome, foto)]
+        photo = pessoas[0][2]
+        path_photo = "../" + photo[:-1]
+        self.recognition(img_cam, path_photo)
+
+        # verificar resultado para salvar notificaçao
+        if self.result == True:
+            self.fotos_bd.insertNotificationConhecido(
+                f"{pessoas[0][1]} entrou no carro",
+                pessoas[0][0]
+            )
+
+        elif self.result == False:
+            self.fotos_bd.insertNotificationDesconhecido(
+                "pessoa desconhecida entrou no carro"
+            )
+            
+
+        # for p in pessoas:
+        #     photo = p[1][:-1]
+        #     path_photo = "../" + photo
+        #     self.recognition(img_cam, path_photo)
+        #     print(self.result)
