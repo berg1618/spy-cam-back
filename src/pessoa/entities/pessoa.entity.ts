@@ -8,7 +8,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Usuario } from '../../usuario/entities/usuario.entity';
-import { Notificacao } from '../../notificacao/entities/notificacao.entity';
+import { Registro } from '../../registro/entities/registro.entity';
 
 @Table({ tableName: 'pessoa' })
 export class Pessoa extends Model {
@@ -18,6 +18,6 @@ export class Pessoa extends Model {
   @Column({ type: DataType.TEXT })
   fotos: string;
 
-  @HasMany(() => Notificacao)
-  noticacoes: Notificacao[];
+  @HasMany(() => Registro)
+  registro: Registro[];
 }

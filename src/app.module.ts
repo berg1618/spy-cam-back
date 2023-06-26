@@ -4,11 +4,12 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import * as dotenv from 'dotenv';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { PessoaModule } from './pessoa/pessoa.module';
-import { NotificacaoModule } from './notificacao/notificacao.module';
-import { Notificacao } from './notificacao/entities/notificacao.entity';
+import { RegistroModule } from './registro/registro.module';
 import { Pessoa } from './pessoa/entities/pessoa.entity';
 import { AuthModule } from './auth/auth.module';
 import { UsuarioPessoaModule } from './usuario_pessoa/usuario_pessoa.module';
+import { Usuario_Pessoa } from './usuario_pessoa/entities/usuario_pessoa.entity';
+import { Registro } from './registro/entities/registro.entity';
 
 dotenv.config();
 
@@ -21,13 +22,13 @@ dotenv.config();
       username: process.env.DBUSER,
       password: process.env.DBPASSWORD,
       database: 'spy_cam',
-      models: [Usuario, Pessoa, Notificacao],
+      models: [Usuario, Pessoa, Registro, Usuario_Pessoa],
       synchronize: true,
       autoLoadModels: true,
     }),
     UsuarioModule,
     PessoaModule,
-    NotificacaoModule,
+    RegistroModule,
     AuthModule,
     UsuarioPessoaModule,
   ],
