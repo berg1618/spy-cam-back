@@ -11,6 +11,7 @@ PROCESSO_ATIVO = False
 HORA_DETECCAO = 0
 CADASTRAR_ROSTO = True
 ARQUIVO_TEMPORARIO = None
+DETECTAR_ROSTO = True
 
 
 # instanciar a classe com o metodo de reconhecimento
@@ -48,21 +49,34 @@ while not cv2.waitKey(20) & 0xFF == ord('q'):
 
                 # cv2.imwrite("./fotos_teste/ft.jpg" , rosto)
 
-                with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as temp_file:
-                    ARQUIVO_TEMPORARIO = temp_file.name
+                if DETECTAR_ROSTO == True:
+                    
+                    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as temp_file:
+                        ARQUIVO_TEMPORARIO = temp_file.name
 
-                    # Salva a imagem do rosto no arquivo temporário
-                    cv2.imwrite(ARQUIVO_TEMPORARIO, rosto)
+                        # Salva a imagem do rosto no arquivo temporário
+                        cv2.imwrite(ARQUIVO_TEMPORARIO, rosto)
+                        # print(ARQUIVO_TEMPORARIO)
+
+                        # evitar q o progroma fique atualizando a viriavel
+                        # que aponta para a foto desnecessariamente
+                        DETECTAR_ROSTO = False
             
-            
+
         if PROCESSO_ATIVO == False:
             print('vai')
+            # print("-->", ARQUIVO_TEMPORARIO)
             PROCESSO_ATIVO = True
-            thread = threading.Thread(target=recog.recognition, args=['./clau.jpeg', ARQUIVO_TEMPORARIO]).start()
-    
+            # thread = threading.Thread(target=recog.recognition, args=['./clau.jpeg', ARQUIVO_TEMPORARIO]).start()
+            thread = threading.Thread(target=recog.for_each_photo, args=[ARQUIVO_TEMPORARIO]).start()
             
         if recog.result != None:
             if recog.result != 10 and CADASTRAR_ROSTO == True:
+
+                # A IDEIA ERA DE QUE A FUNÇAO DE SALVAR NOTIFICAÇÃO
+                # FOSSE CHAMADA AQUI. POREM COMO NÃO CONSIGO RESGATAR DADOS
+                # COMO O NOME DA PESSOA E ID, VOU CHAMA-LA DENTRO
+                # DE RECOGNITION POR ENQUANTO
                 
                 print(">>", recog.result)
                 CADASTRAR_ROSTO = False # so cadastraremos um novo rosto daqui a 10 min por ex.
@@ -82,10 +96,12 @@ while not cv2.waitKey(20) & 0xFF == ord('q'):
 
         # virificar se ja passaram os 10 min para poder
         # fazer uma nova identificação
-        if HORA_DETECCAO > 10:
+        if HORA_DETECCAO > 10: # nesse caso so estamos contando 10 seg
             PROCESSO_ATIVO = False
             CADASTRAR_ROSTO = True
             HORA_DETECCAO = 0
+            DETECTAR_ROSTO = True # permitir novas capturas de rosto
+
 
         # cv2.imshow('gray', gray)
         cv2.imshow('color', frame)
