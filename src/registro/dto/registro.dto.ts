@@ -1,6 +1,6 @@
 import { IsString, IsNumber } from 'class-validator';
 
-export class CreateNotificacaoDto {
+export class CreateRegistroDto {
   @IsString()
   mensagem: string;
 

@@ -7,8 +7,8 @@ import {
 } from 'sequelize-typescript';
 import { Pessoa } from '../../pessoa/entities/pessoa.entity';
 
-@Table({ tableName: 'notificacao' })
-export class Notificacao extends Model {
+@Table({ tableName: 'registro' })
+export class Registro extends Model {
   @Column
   mensagem: string;
 
