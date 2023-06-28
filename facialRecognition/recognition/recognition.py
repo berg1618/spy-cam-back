@@ -15,6 +15,7 @@ class Recognition:
             # pegar uma foto minha
             img_pessoa = fr.load_image_file(pessoa_conhecida)
             # imgClaudio = cv2.cvtColor(imgClaudio, cv2.COLOR_BGR2RGB)
+            cv2.imshow('color', pessoa_conhecida)
 
             # a foto capturada pela camera
             img_cam = fr.load_image_file(img_camera)
