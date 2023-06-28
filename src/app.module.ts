@@ -17,7 +17,7 @@ dotenv.config();
   imports: [
     SequelizeModule.forRoot({
       dialect: 'mysql',
-      host: 'localhost',
+      host: process.env.DBHOST,
       port: parseInt(process.env.DBPORT),
       username: process.env.DBUSER,
       password: process.env.DBPASSWORD,
