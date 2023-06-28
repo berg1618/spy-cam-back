@@ -21,10 +21,10 @@ export class UsuarioService {
       throw new UnprocessableEntityException(`Acesso negado. ${err.message}`);
     }
   }
-  async cadastrarUser(user: CreateUsuarioDto) {
+  async cadastrarUser(user) {
     try {
       user.senha = await bcrypt.hash(user.senha, 8);
-      await this.usuarioRepository.create({ user });
+      await this.usuarioRepository.create( user );
     } catch (err) {
       throw new Error(`não foi posível realizar o cadastro. ${err.message}`);
     }

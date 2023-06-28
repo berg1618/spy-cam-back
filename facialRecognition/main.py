@@ -55,7 +55,8 @@ while not cv2.waitKey(20) & 0xFF == ord('q'):
                         ARQUIVO_TEMPORARIO = temp_file.name
 
                         # Salva a imagem do rosto no arquivo temporário
-                        cv2.imwrite(ARQUIVO_TEMPORARIO, rosto)
+                        cv2.imwrite(ARQUIVO_TEMPORARIO, frame)
+                        # cv2.imwrite(ARQUIVO_TEMPORARIO, rosto)
                         # print(ARQUIVO_TEMPORARIO)
 
                         # evitar q o progroma fique atualizando a viriavel
@@ -67,9 +68,16 @@ while not cv2.waitKey(20) & 0xFF == ord('q'):
             print('vai')
             # print("-->", ARQUIVO_TEMPORARIO)
             PROCESSO_ATIVO = True
-            # thread = threading.Thread(target=recog.recognition, args=['./clau.jpeg', ARQUIVO_TEMPORARIO]).start()
-            thread = threading.Thread(target=recog.for_each_photo, args=[ARQUIVO_TEMPORARIO]).start()
             
+
+            # so fzr o reconhecimento se ouver um arquivo
+            # virificar se o arquivo nao esta corrompido
+            if ARQUIVO_TEMPORARIO != None:
+                if ".jpg" in ARQUIVO_TEMPORARIO:
+                    # thread = threading.Thread(target=recog.recognition, args=['./clau.jpeg', ARQUIVO_TEMPORARIO]).start()
+                    thread = threading.Thread(target=recog.for_each_photo, args=[ARQUIVO_TEMPORARIO]).start()
+                    ARQUIVO_TEMPORARIO = None
+
         if recog.result != None:
             if recog.result != 10 and CADASTRAR_ROSTO == True:
 

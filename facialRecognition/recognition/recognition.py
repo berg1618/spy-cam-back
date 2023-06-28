@@ -26,7 +26,7 @@ class Recognition:
             cv2.rectangle(img_pessoa, (localizar_rosto[3], localizar_rosto[0], localizar_rosto[1], localizar_rosto[2]), (0, 255, 0), 2)
 
             # pegar pontos de indentificação na imagem
-            encode_claudio = fr.face_encodings(img_pessoa)[0]           
+            encode_claudio = fr.face_encodings(img_pessoa)[0]  
 
             encode_img_camera = fr.face_encodings(img_cam)[0]
 

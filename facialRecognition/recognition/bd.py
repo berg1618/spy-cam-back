@@ -14,8 +14,8 @@ class BD:
         self.mycursor = self.mydb.cursor()
 
     def insertNotificationConhecido(self, msg, id):
-        sql = """INSERT INTO notificacao 
-        (mensagem, id_pessoa, createdAt, updatedAt) 
+        sql = """INSERT INTO registro 
+        (mensagem, pessoa_id, createdAt, updatedAt) 
         VALUES (%s, %s, NOW(), NOW())"""
 
         self.mycursor.execute(sql, (msg, id))
@@ -23,7 +23,7 @@ class BD:
 
     
     def insertNotificationDesconhecido(self, msg):
-        sql = """INSERT INTO notificacao 
+        sql = """INSERT INTO registro 
         (mensagem, createdAt, updatedAt) 
         VALUES (%s, NOW(), NOW())"""
 
