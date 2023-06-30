@@ -3,6 +3,7 @@ import face_recognition as fr
 import cv2
 from recognition.bd import BD
 # from bd import BD
+import time
 
 class Recognition:
     def __init__(self):
@@ -15,7 +16,6 @@ class Recognition:
             # pegar uma foto minha
             img_pessoa = fr.load_image_file(pessoa_conhecida)
             # imgClaudio = cv2.cvtColor(imgClaudio, cv2.COLOR_BGR2RGB)
-            cv2.imshow('color', pessoa_conhecida)
 
             # a foto capturada pela camera
             img_cam = fr.load_image_file(img_camera)
@@ -33,7 +33,7 @@ class Recognition:
 
             compare = fr.compare_faces([encode_claudio], encode_img_camera)
             self.result = compare[0]
-    
+
         except:
             # nem sempre o metodo conseguirá reconhecer que se trata de um rosto 
             # logo de primeira. Isso pode causar um erro.
@@ -43,7 +43,7 @@ class Recognition:
 
             # so salvamos no banco se o metodo estiver me retornando um valor
             # diferente de 10 ou None
-           self.result = 10
+            self.result = 10
 
 
     # POR ENQUANTO PEGAR APEBAS A ULTIMA FOTO REGISTRADA
@@ -52,6 +52,8 @@ class Recognition:
         pessoas = self.fotos_bd.getPhotos() # [(id, nome, foto)]
         photo = pessoas[0][2]
         path_photo = "../" + photo[:-1]
+        
+        time.sleep(0.2)
         self.recognition(img_cam, path_photo)
 
         # verificar resultado para salvar notificaçao
