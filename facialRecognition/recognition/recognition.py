@@ -28,7 +28,7 @@ class Recognition:
 
             # pegar pontos de indentificação na imagem
             encode_claudio = fr.face_encodings(img_pessoa)[0]  
-
+           
             encode_img_camera = fr.face_encodings(img_cam)[0]
 
             compare = fr.compare_faces([encode_claudio], encode_img_camera)

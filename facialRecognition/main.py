@@ -74,6 +74,7 @@ while not cv2.waitKey(20) & 0xFF == ord('q'):
             # virificar se o arquivo nao esta corrompido
             if ARQUIVO_TEMPORARIO != None:
                 if ".jpg" in ARQUIVO_TEMPORARIO:
+                    
                     # thread = threading.Thread(target=recog.recognition, args=['./clau.jpeg', ARQUIVO_TEMPORARIO]).start()
                     thread = threading.Thread(target=recog.for_each_photo, args=[ARQUIVO_TEMPORARIO]).start()
                     ARQUIVO_TEMPORARIO = None
