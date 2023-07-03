@@ -12,6 +12,7 @@ import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { CurrentUser } from '../usuario/usuario.guard';
 import { Usuario } from '../usuario/entities/usuario.entity';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('pessoa')
 export class PessoaController {
@@ -34,6 +35,7 @@ export class PessoaController {
       }),
     }),
   )
+  @Public()
   async cadastrarPessoa(
     @Body() pessoa: Pessoa,
     @UploadedFiles()

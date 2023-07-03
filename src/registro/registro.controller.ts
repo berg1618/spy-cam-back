@@ -13,6 +13,7 @@ export class RegistroController {
   async listarRegistro() {
     return this.registroService.listarRegistros();
   }
+
   @Public()
   @Post('/cadastro')
   async CadastrarRegistros(@Body() registro: CreateRegistroDto): Promise<any> {
@@ -20,7 +21,7 @@ export class RegistroController {
   }
 
   async buscar() {
-    return this.registroService.listarRegistro();
+    await this.registroService.listarRegistro();
   }
 
   @Public()
@@ -28,8 +29,14 @@ export class RegistroController {
   async Notificar(): Promise<Observable<any>> {
     return interval(30000).pipe(
       concatMap(async (_) => {
-        const registro = await this.buscar();
-        return { data: registro };
+        let registro;
+        const buscar = await this.buscar();
+        console.log(buscar);
+        if (buscar[0]['enviado'] == false) {
+          registro == buscar;
+          return { data: registro };
+        }
+        return { data: '' };
       }),
     );
   }
