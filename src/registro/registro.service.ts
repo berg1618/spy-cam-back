@@ -32,7 +32,7 @@ export class RegistroService {
     }
   }
 
-  async listarRegistro() {
+  async listarUltimoRegistro() {
     try {
       const registro = await this.registroRepository.findAll({
         limit: 1,
@@ -43,5 +43,12 @@ export class RegistroService {
     } catch (err) {
       throw new Error(`não foi posível encontrar nada. ${err.message}`);
     }
+  }
+
+  async atualizarRegistro(registro_id: number) {
+    await this.registroRepository.update(
+      { enviado: true },
+      { where: { id: registro_id } },
+    );
   }
 }

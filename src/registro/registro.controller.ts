@@ -6,7 +6,7 @@ import { Observable, concatMap, interval } from 'rxjs';
 
 @Controller('registro')
 export class RegistroController {
-  constructor(private registroService: RegistroService) { }
+  constructor(private registroService: RegistroService) {}
 
   @Public()
   @Get()
@@ -20,15 +20,13 @@ export class RegistroController {
     return this.registroService.cadastrarRegistro(registro);
   }
 
-  async buscar() {
-    let registro;
-    const buscar = await this.registroService.listarRegistro();
-    if (buscar[0]['enviado'] == false) {
-      registro == buscar;
+  async buscarUltimoRegistro() {
+    const registro = await this.registroService.listarUltimoRegistro();
+    if (registro[0]['enviado'] == false) {
+      this.registroService.atualizarRegistro(registro[0]['id']);
       return { data: registro };
     }
     return { data: '' };
-
   }
 
   @Public()
@@ -36,8 +34,7 @@ export class RegistroController {
   async Notificar(): Promise<Observable<any>> {
     return interval(30000).pipe(
       concatMap(async (_) => {
-        return { data: await this.buscar() }
-
+        return { data: await this.buscarUltimoRegistro() };
       }),
     );
   }
