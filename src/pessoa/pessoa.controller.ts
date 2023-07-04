@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UploadedFiles,
   UseInterceptors,
@@ -48,5 +49,11 @@ export class PessoaController {
       arrayFotos += foto.path + ';';
     });
     this.pessoaService.cadastrarPessoa(pessoa, arrayFotos, usuario);
+  }
+
+  @Public()
+  @Get()
+  async listarPessoas() {
+    return this.pessoaService.listarPessoas();
   }
 }

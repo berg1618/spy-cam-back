@@ -22,7 +22,11 @@ export class RegistroController {
 
   async buscarUltimoRegistro() {
     const registro = await this.registroService.listarUltimoRegistro();
-    if (registro[0]['enviado'] == false) {
+    console.log(registro);
+    if (
+      registro[0]['dataValues']['enviado'] ===
+      registro[1]['previousDataValues']['enviado']
+    ) {
       this.registroService.atualizarRegistro(registro[0]['id']);
       return { data: registro };
     }
