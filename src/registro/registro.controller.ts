@@ -22,11 +22,8 @@ export class RegistroController {
 
   async buscarUltimoRegistro() {
     const registro = await this.registroService.listarUltimoRegistro();
-    if (registro[0]['dataValues']['enviado']) {
-      this.registroService.atualizarRegistro(registro[0]['id']);
-      return { data: registro };
-    }
-    return { data: '' };
+    this.registroService.atualizarRegistro(registro[0]['id']);
+    return { data: registro };
   }
 
   @Public()
