@@ -45,10 +45,10 @@ export class RegistroService {
     }
   }
 
-  async atualizarRegistro(registro_id: number) {
-    await this.registroRepository.update(
-      { enviado: true },
-      { where: { id: registro_id } },
-    );
+  async atualizarRegistro(registro_id) {
+    const registro = await this.registroRepository.findOne(registro_id);
+
+    registro['enviado'] = true;
+    return this.registroRepository.save(registro);
   }
 }

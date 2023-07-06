@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Sse } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Sse,
+} from '@nestjs/common';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { RegistroService } from './registro.service';
 import { CreateRegistroDto } from './dto/registro.dto';
@@ -16,13 +25,18 @@ export class RegistroController {
 
   @Public()
   @Post('/cadastro')
-  async CadastrarRegistros(@Body() registro: CreateRegistroDto): Promise<any> {
+  async cadastrarRegistros(@Body() registro: CreateRegistroDto): Promise<any> {
     return this.registroService.cadastrarRegistro(registro);
+  }
+
+  @Public()
+  @Patch(':registro_id')
+  async atualizarRegistro(@Param() registro_id) {
+    await this.registroService.atualizarRegistro(registro_id);
   }
 
   async buscarUltimoRegistro() {
     const registro = await this.registroService.listarUltimoRegistro();
-    this.registroService.atualizarRegistro(registro[0]['id']);
     return { data: registro };
   }
 

@@ -17,7 +17,7 @@ export class UsuariosController {
 
   @Public()
   @Post('/cadastro')
-  async CadastrarPessoa(@Body() usuario, @Res() res: Response): Promise<any> {
+  async cadastrarPessoa(@Body() usuario, @Res() res: Response): Promise<any> {
     try {
       if (Object.values(usuario).length == 0) {
         return <any>(
