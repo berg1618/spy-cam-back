@@ -12,7 +12,17 @@ import {
 import { Public } from 'src/auth/decorators/public.decorator';
 import { RegistroService } from './registro.service';
 import { CreateRegistroDto } from './dto/registro.dto';
-import { Observable, concatMap, defer, interval, map, repeat, tap } from 'rxjs';
+import {
+  Observable,
+  concatMap,
+  defer,
+  filter,
+  interval,
+  map,
+  repeat,
+  scan,
+  tap,
+} from 'rxjs';
 import { Response } from 'express';
 
 @Controller('registro')
@@ -50,7 +60,7 @@ export class RegistroController {
         delay: 1000,
       }),
       tap((registro) => {
-        if (registro) {
+        if (registro.data['enviado'] === 1) {
           setTimeout(() => {
             response.end();
           }, 1000);
