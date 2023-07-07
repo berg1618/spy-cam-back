@@ -6,12 +6,14 @@ import {
   Patch,
   Post,
   Put,
+  Res,
   Sse,
 } from '@nestjs/common';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { RegistroService } from './registro.service';
 import { CreateRegistroDto } from './dto/registro.dto';
-import { Observable, concatMap, interval } from 'rxjs';
+import { Observable, concatMap, defer, interval, map, repeat, tap } from 'rxjs';
+import { Response } from 'express';
 
 @Controller('registro')
 export class RegistroController {
@@ -42,11 +44,22 @@ export class RegistroController {
 
   @Public()
   @Sse('watch')
-  async Notificar(): Promise<Observable<any>> {
-    return interval(30000).pipe(
-      concatMap(async (_) => {
-        return { data: await this.buscarUltimoRegistro() };
+  async Notificar(@Res() response: Response): Promise<Observable<any>> {
+    return defer(() => this.buscarUltimoRegistro()).pipe(
+      repeat({
+        delay: 1000,
       }),
+      tap((registro) => {
+        if (registro) {
+          setTimeout(() => {
+            response.end();
+          }, 1000);
+        }
+      }),
+      map((registro) => ({
+        type: 'message',
+        data: registro,
+      })),
     );
   }
 }

@@ -25,7 +25,6 @@ export class RegistroService {
   async listarRegistros() {
     try {
       const registros = await this.registroRepository.findAll();
-
       return registros;
     } catch (err) {
       throw new Error(`não foi posível encontrar nada. ${err.message}`);
@@ -46,9 +45,16 @@ export class RegistroService {
   }
 
   async atualizarRegistro(registro_id) {
-    const registro = await this.registroRepository.findOne(registro_id);
-
-    registro['enviado'] = true;
-    return this.registroRepository.save(registro);
+    const registro = await this.registroRepository.findOne({
+      where: { id: registro_id },
+    });
+    await this.registroRepository.update(
+      { enviado: null },
+      {
+        where: {
+          id: registro_id,
+        },
+      },
+    );
   }
 }
