@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UploadedFiles,
   UseInterceptors,
@@ -12,6 +13,7 @@ import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { CurrentUser } from '../usuario/usuario.guard';
 import { Usuario } from '../usuario/entities/usuario.entity';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('pessoa')
 export class PessoaController {
@@ -34,6 +36,7 @@ export class PessoaController {
       }),
     }),
   )
+  @Public()
   async cadastrarPessoa(
     @Body() pessoa: Pessoa,
     @UploadedFiles()
@@ -46,5 +49,11 @@ export class PessoaController {
       arrayFotos += foto.path + ';';
     });
     this.pessoaService.cadastrarPessoa(pessoa, arrayFotos, usuario);
+  }
+
+  @Public()
+  @Get()
+  async listarPessoas() {
+    return this.pessoaService.listarPessoas();
   }
 }
