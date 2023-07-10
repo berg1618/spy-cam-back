@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post, Sse } from '@nestjs/common';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 import { RegistroService } from './registro.service';
 import { CreateRegistroDto } from './dto/registro.dto';
 import { Observable, concatMap, interval } from 'rxjs';
+
 
 @Controller('registro')
 export class RegistroController {
@@ -26,7 +27,7 @@ export class RegistroController {
   @Public()
   @Sse('watch')
   async Notificar(): Promise<Observable<any>> {
-    return interval(30000).pipe(
+    return interval(10000).pipe(
       concatMap(async (_) => {
         const registro = await this.buscar();
         return { data: registro };
