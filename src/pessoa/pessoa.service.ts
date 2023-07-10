@@ -31,4 +31,15 @@ export class PessoaService {
       throw new Error(`não foi posível realizar o cadastro. ${err.message}`);
     }
   }
+
+  async listarPessoas() {
+    try {
+      const pessoas = await this.pessoaRepository.findAll();
+      return {
+        dados: pessoas,
+      };
+    } catch (err) {
+      throw new Error(`não foi posível listar ${err.message}`);
+    }
+  }
 }

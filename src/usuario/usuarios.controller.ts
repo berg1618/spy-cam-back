@@ -17,14 +17,16 @@ export class UsuariosController {
 
   @Public()
   @Post('/cadastro')
-  async CadastrarPessoa(@Body() usuario, @Res() res?: Response): Promise<any> {
+  async cadastrarPessoa(@Body() usuario, @Res() res: Response): Promise<any> {
     try {
       if (Object.values(usuario).length == 0) {
-        return res.status(400).json({ msg: 'corpo da requisição não pode ser null' })
+        return res
+          .status(400)
+          .json({ msg: 'corpo da requisição não pode ser null' });
       }
 
       if (!usuario.nome || !usuario.email || !usuario.senha) {
-        return res.status(400).json({ msg: 'preencha todos os campos' })
+        return res.status(400).json({ msg: 'preencha todos os campos' });
       }
 
       const check = await this.usuarioService.userExists(usuario);
@@ -35,7 +37,6 @@ export class UsuariosController {
 
       this.usuarioService.cadastrarUser(usuario);
       return res.status(201).json({ msg: 'usuario cadastrado' });
-
     } catch (err) {
       throw new HttpException(
         'erro no servidor',
