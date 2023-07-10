@@ -5,24 +5,13 @@ import {
   Param,
   Patch,
   Post,
-  Put,
   Res,
   Sse,
 } from '@nestjs/common';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 import { RegistroService } from './registro.service';
 import { CreateRegistroDto } from './dto/registro.dto';
-import {
-  Observable,
-  concatMap,
-  defer,
-  filter,
-  interval,
-  map,
-  repeat,
-  scan,
-  tap,
-} from 'rxjs';
+import { Observable, defer, map, repeat, tap } from 'rxjs';
 import { Response } from 'express';
 
 @Controller('registro')
