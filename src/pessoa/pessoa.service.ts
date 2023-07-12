@@ -1,4 +1,8 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { Pessoa } from './entities/pessoa.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { Repository } from 'sequelize-typescript';
@@ -19,16 +23,16 @@ export class PessoaService {
 
       const criado = await this.pessoaRepository.create(dados);
 
-      this.usuarioPessoaRepository.create({
+      const usuarioPessoa = await this.usuarioPessoaRepository.create({
         pessoa_id: criado.id,
-        usuario_id: usuario.sub,
+        usuario_id: usuario,
       });
 
       return {
         msg: 'pessoa cadastrada com sucesso',
       };
     } catch (err) {
-      throw new Error(`não foi posível realizar o cadastro. ${err.message}`);
+      throw new UnauthorizedException('É necessário estar logado');
     }
   }
 
