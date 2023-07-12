@@ -49,7 +49,7 @@ export class RegistroController {
         delay: 1000,
       }),
       tap((registro) => {
-        if (registro.data['enviado'] === 1) {
+        if (registro['enviado'] === 1) {
           setTimeout(() => {
             response.end();
           }, 1000);

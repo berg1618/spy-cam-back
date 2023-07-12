@@ -36,7 +36,6 @@ export class UsuarioService {
       const userExists = await this.usuarioRepository.findOne({
         where: { email: user.email },
       });
-      console.log(userExists);
       return userExists;
     } catch (err) {
       throw new Error(`não foi posível realizar a operacao ${err.message}`);

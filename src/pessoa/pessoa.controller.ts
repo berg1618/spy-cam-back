@@ -36,12 +36,11 @@ export class PessoaController {
       }),
     }),
   )
-  @Public()
   async cadastrarPessoa(
     @Body() pessoa: Pessoa,
     @UploadedFiles()
     fotos: Array<Express.Multer.File>,
-    @CurrentUser() usuario: Usuario,
+    @CurrentUser('sub') usuario,
   ) {
     let arrayFotos: string = '';
 
