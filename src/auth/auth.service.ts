@@ -18,18 +18,17 @@ export class AuthService {
     try {
       const user = await this.usuarioService.login(email);
 
-      bcrypt.compare(senha, user.senha, function (err, result) {
-        if (err) {
-          throw new UnauthorizedException();
-        }
-      });
+      const senhaValidada = await bcrypt.compare(senha, user.senha);
 
-      const payload = { email: user.email, sub: user.id };
-      return {
-        access_token: await this.jwtService.signAsync(payload),
-      };
-    } catch (err) {
+      if (senhaValidada) {
+        const payload = { email: user.email, sub: user.id };
+        return {
+          access_token: await this.jwtService.signAsync(payload),
+        };
+      }
       throw new NotFoundException('Usuário não encontrado');
+    } catch (err) {
+      throw new UnauthorizedException('E-mail incorreto');
     }
   }
 }
