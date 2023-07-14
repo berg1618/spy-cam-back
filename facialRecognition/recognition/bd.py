@@ -1,5 +1,6 @@
 # se conectar ao banco e pegar as fotos
 import mysql.connector
+import datetime
 
 class BD:
     def __init__(self):
@@ -15,19 +16,19 @@ class BD:
 
     def insertNotificationConhecido(self, msg, id):
         sql = """INSERT INTO registro 
-        (mensagem, pessoa_id, createdAt, updatedAt) 
-        VALUES (%s, %s, NOW(), NOW())"""
+        (mensagem, enviado, pessoa_id, createdAt, updatedAt) 
+        VALUES (%s, %s, %s, NOW(), NOW())"""
 
-        self.mycursor.execute(sql, (msg, id))
+        self.mycursor.execute(sql, (msg, True, id))
         self.mydb.commit()
 
     
     def insertNotificationDesconhecido(self, msg):
         sql = """INSERT INTO registro 
-        (mensagem, createdAt, updatedAt) 
-        VALUES (%s, NOW(), NOW())"""
+        (mensagem, enviado, createdAt, updatedAt) 
+        VALUES (%s, %s, NOW(), NOW())"""
 
-        self.mycursor.execute(sql, (msg,))
+        self.mycursor.execute(sql, (msg, True))
         self.mydb.commit()
 
 
@@ -36,3 +37,10 @@ class BD:
         self.mycursor.execute("SELECT id, nome_pessoa, fotos FROM pessoa ORDER BY id DESC LIMIT 1")
         res = self.mycursor.fetchall()
         return res
+    
+    def verificarNotificacao(self):
+        x = "SELECT pessoa_id, createdAt from registro order by id desc limit 1"
+        self.mycursor.execute(x)
+        res = self.mycursor.fetchall()
+        return res
+    

@@ -24,7 +24,9 @@ export class RegistroService {
 
   async listarRegistros() {
     try {
-      const registros = await this.registroRepository.findAll();
+      const registros = await this.registroRepository.findAll({
+        order: [['createdAt', 'DESC']],
+      });
       return registros;
     } catch (err) {
       throw new Error(`não foi posível encontrar nada. ${err.message}`);
@@ -36,7 +38,11 @@ export class RegistroService {
       const registro = await this.registroRepository.findAll({
         limit: 1,
         order: [['createdAt', 'DESC']],
-      });
+          where: {
+            enviado: 1,
+          }
+      }
+      );
 
       return registro;
     } catch (err) {
@@ -44,15 +50,17 @@ export class RegistroService {
     }
   }
 
-  async atualizarRegistro(registro_id) {
+  async atualizarRegistro() {
     const registro = await this.registroRepository.findOne({
-      where: { id: registro_id },
+      limit: 1,
+      order: [['createdAt', 'DESC']]
     });
+
     await this.registroRepository.update(
-      { enviado: null },
+      { enviado: 0 },
       {
         where: {
-          id: registro_id,
+          id: registro.id,
         },
       },
     );

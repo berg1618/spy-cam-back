@@ -33,11 +33,12 @@ export class RegistroController {
   @Public()
   @Patch(':registro_id')
   async atualizarRegistro(@Param() registro_id) {
-    await this.registroService.atualizarRegistro(registro_id);
+    await this.registroService.atualizarRegistro();
   }
 
   async buscarUltimoRegistro() {
     const registro = await this.registroService.listarUltimoRegistro();
+    await this.registroService.atualizarRegistro()
     return { data: registro };
   }
 

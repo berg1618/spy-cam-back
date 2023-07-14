@@ -13,7 +13,7 @@ export class Registro extends Model {
   mensagem: string;
 
   @Column
-  enviado: number;
+  enviado: boolean;
 
   @ForeignKey(() => Pessoa)
   @Column
