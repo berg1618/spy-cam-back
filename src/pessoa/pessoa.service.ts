@@ -46,4 +46,28 @@ export class PessoaService {
       throw new Error(`não foi posível listar ${err.message}`);
     }
   }
+
+  async removerPessoa(pessoa_id) {
+    try {
+      const dados = JSON.stringify(pessoa_id);
+      const regex = '[0-9]+';
+
+      const id = dados.match(regex);
+
+      const pessoa = await this.pessoaRepository.findOne({
+        where: { id: id },
+      });
+
+      await this.pessoaRepository.destroy({
+        where: { id: pessoa.id },
+        cascade: true,
+      });
+
+      return {
+        dados: 'removido com sucesso',
+      };
+    } catch (err) {
+      throw new Error(`não foi posível remover ${err.message}`);
+    }
+  }
 }

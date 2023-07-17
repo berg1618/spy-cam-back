@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   UploadedFiles,
   UseInterceptors,
@@ -54,5 +56,11 @@ export class PessoaController {
   @Get()
   async listarPessoas() {
     return this.pessoaService.listarPessoas();
+  }
+
+  @Public()
+  @Delete(':pessoa_id')
+  async apagarPessoa(@Param() pessoa_id) {
+    return this.pessoaService.removerPessoa(pessoa_id);
   }
 }

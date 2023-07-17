@@ -129,5 +129,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-arquivos/pessoas
+arquivos/pessoas/*.*
 facialRecognition/fotos_teste
