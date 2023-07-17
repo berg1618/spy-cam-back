@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Pessoa } from './entities/pessoa.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { Repository } from 'sequelize-typescript';
@@ -44,6 +40,33 @@ export class PessoaService {
       };
     } catch (err) {
       throw new Error(`não foi posível listar ${err.message}`);
+    }
+  }
+
+  async removerPessoa(pessoa_id) {
+    try {
+      const dados = JSON.stringify(pessoa_id);
+      const regex = '[0-9]+';
+
+      const id = dados.match(regex);
+
+      await this.usuarioPessoaRepository.update(
+        {
+          pessoa_id: null,
+        },
+        { where: { pessoa_id: id } },
+      );
+
+      await this.pessoaRepository.destroy({
+        where: { id: id },
+        cascade: true,
+      });
+
+      return {
+        dados: 'removido com sucesso',
+      };
+    } catch (err) {
+      throw new Error(`não foi posível remover ${err.message}`);
     }
   }
 }
