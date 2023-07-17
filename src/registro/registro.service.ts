@@ -38,11 +38,10 @@ export class RegistroService {
       const registro = await this.registroRepository.findAll({
         limit: 1,
         order: [['createdAt', 'DESC']],
-          where: {
-            enviado: 1,
-          }
-      }
-      );
+        where: {
+          enviado: 1,
+        },
+      });
 
       return registro;
     } catch (err) {
@@ -53,7 +52,7 @@ export class RegistroService {
   async atualizarRegistro() {
     const registro = await this.registroRepository.findOne({
       limit: 1,
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'DESC']],
     });
 
     await this.registroRepository.update(

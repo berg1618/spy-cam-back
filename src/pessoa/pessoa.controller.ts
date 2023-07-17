@@ -14,7 +14,6 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { CurrentUser } from '../usuario/usuario.guard';
-import { Usuario } from '../usuario/entities/usuario.entity';
 import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('pessoa')

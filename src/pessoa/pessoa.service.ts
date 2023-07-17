@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Pessoa } from './entities/pessoa.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { Repository } from 'sequelize-typescript';
@@ -54,12 +50,15 @@ export class PessoaService {
 
       const id = dados.match(regex);
 
-      const pessoa = await this.pessoaRepository.findOne({
-        where: { id: id },
-      });
+      await this.usuarioPessoaRepository.update(
+        {
+          pessoa_id: null,
+        },
+        { where: { pessoa_id: id } },
+      );
 
       await this.pessoaRepository.destroy({
-        where: { id: pessoa.id },
+        where: { id: id },
         cascade: true,
       });
 

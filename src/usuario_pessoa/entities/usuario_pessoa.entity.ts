@@ -21,8 +21,6 @@ export class Usuario_Pessoa extends Model {
   @Column
   pessoa_id: number;
 
-  @BelongsTo(() => Pessoa, {
-    onDelete: 'CASCADE',
-  })
+  @BelongsTo(() => Pessoa)
   pessoa: Pessoa;
 }
