@@ -19,6 +19,6 @@ export class Registro extends Model {
   @Column
   pessoa_id: number;
 
-  @BelongsTo(() => Pessoa)
+  @BelongsTo(() => Pessoa, { onDelete: 'CASCADE' })
   pessoa: Pessoa;
 }
