@@ -3,7 +3,7 @@ import { UsuariosController } from './usuarios.controller';
 import { UsuarioService } from './usuario.services';
 import { Response } from 'express';
 
-describe('Teste classe de equivalencia UsuarioController', () => {
+describe('Teste UsuarioController', () => {
   let controller: UsuariosController;
   let service: UsuarioService;
   let res: Response;

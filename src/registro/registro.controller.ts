@@ -53,7 +53,7 @@ export class RegistroController {
         if (registro['enviado'] === 1) {
           setTimeout(() => {
             response.end();
-          }, 1000);
+          }, 5000);
         }
       }),
       map((registro) => ({

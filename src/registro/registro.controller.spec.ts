@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RegistroController } from './registro.controller';
 import { RegistroService } from './registro.service';
 
-describe('Teste classe de equivalencia ReegistroControlles', () => {
+describe('Teste ReegistroControlles', () => {
   let controller: RegistroController;
   let service: RegistroService;
   let registros = [
