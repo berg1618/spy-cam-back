@@ -3,6 +3,7 @@ import { PessoaService } from './pessoa.service';
 import { getModelToken } from '@nestjs/sequelize';
 import { Pessoa } from './entities/pessoa.entity';
 import { Usuario_Pessoa } from '../usuario_pessoa/entities/usuario_pessoa.entity';
+import { UnauthorizedException } from '@nestjs/common';
 
 const pessoa = {
   nome_pessoa: 'claudo',
@@ -44,13 +45,19 @@ describe('PessoaService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('cadastrarPessoa()', () => {
-    it('deve cadastrar uma pessoa', async () => {
-      const fotos = './arquivos/pessoas/foto.jpg';
+  it('deve cadastrar uma pessoa', async () => {
+    const fotos = './arquivos/pessoas/foto.jpg';
 
-      expect(await service.cadastrarPessoa(pessoa, fotos, 1)).toMatchObject({
-        msg: 'pessoa cadastrada com sucesso',
-      });
+    expect(await service.cadastrarPessoa(pessoa, fotos, 1)).toMatchObject({
+      msg: 'pessoa cadastrada com sucesso',
     });
+  });
+
+  it('não deve cadastrar uma pessoa', async () => {
+    const fotos = './arquivos/pessoas/foto.jpg';
+
+    expect(await service.cadastrarPessoa(pessoa, fotos, 1)).rejects.toThrow(
+      new UnauthorizedException('É necessário estar logado'),
+    );
   });
 });
