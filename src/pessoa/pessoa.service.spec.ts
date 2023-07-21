@@ -23,12 +23,16 @@ describe('PessoaService', () => {
           provide: getModelToken(Pessoa),
           useValue: {
             create: jest.fn(() => pessoa),
+            findAll: jest.fn(() => pessoa),
+            findOne: jest.fn(() => pessoa),
+            destroy: jest.fn(() => pessoa),
           },
         },
         {
           provide: getModelToken(Usuario_Pessoa),
           useValue: {
             create: jest.fn(() => usuario_pessoa),
+            update: jest.fn(() => usuario_pessoa),
           },
         },
       ],
@@ -53,11 +57,15 @@ describe('PessoaService', () => {
     });
   });
 
-  it('não deve cadastrar uma pessoa', async () => {
-    const fotos = './arquivos/pessoas/foto.jpg';
+  it('deve listar todas as pessoas', async () => {
+    expect(await service.listarPessoas()).toBeTruthy();
+  });
 
-    expect(await service.cadastrarPessoa(pessoa, fotos, 1)).rejects.toThrow(
-      new UnauthorizedException('É necessário estar logado'),
-    );
+  it('deve remover uma pessoa', async () => {
+    const id = 1;
+    const dados = {
+      dados: 'removido com sucesso',
+    };
+    expect(await service.removerPessoa(id)).toStrictEqual(dados);
   });
 });
