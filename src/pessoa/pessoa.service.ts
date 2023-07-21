@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Pessoa } from './entities/pessoa.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { Repository } from 'sequelize-typescript';
@@ -29,7 +33,7 @@ export class PessoaService {
         msg: 'pessoa cadastrada com sucesso',
       };
     } catch (err) {
-      throw new UnauthorizedException('É necessário estar logado');
+      throw new BadRequestException('Erro ao cadastrar pessoa');
     }
   }
 
@@ -80,7 +84,7 @@ export class PessoaService {
         dados: 'removido com sucesso',
       };
     } catch (err) {
-      throw new Error(`não foi posível remover ${err.message}`);
+      throw new Error(`não foi posível remover`);
     }
   }
 }
