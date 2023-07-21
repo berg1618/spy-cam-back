@@ -10,8 +10,12 @@ import { AuthModule } from './auth/auth.module';
 import { UsuarioPessoaModule } from './usuario_pessoa/usuario_pessoa.module';
 import { Usuario_Pessoa } from './usuario_pessoa/entities/usuario_pessoa.entity';
 import { Registro } from './registro/entities/registro.entity';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+
 
 dotenv.config();
+
 
 @Module({
   imports: [
@@ -26,6 +30,10 @@ dotenv.config();
       synchronize: true,
       autoLoadModels: true,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'arquivos', 'pessoas'),
+      serveRoot: '/arquivos/pessoas',
+    }),
     UsuarioModule,
     PessoaModule,
     RegistroModule,
@@ -33,4 +41,4 @@ dotenv.config();
     UsuarioPessoaModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

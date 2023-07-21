@@ -41,7 +41,7 @@ export class PessoaController {
     @Body() pessoa: Pessoa,
     @UploadedFiles()
     fotos: Array<Express.Multer.File>,
-    @CurrentUser('sub') usuario,
+    @CurrentUser('sub') usuario?,
   ) {
     let arrayFotos: string = '';
 
