@@ -90,7 +90,6 @@ class Recognition:
         elif self.result == False:
 
             pessoa_id = self.fotos_bd.verificarNotificacao()
-            print(pessoa_id[0][0])
 
             if pessoa_id[0][0] == None:
                 print('desconhecido')

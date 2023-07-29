@@ -38,7 +38,13 @@ export class RegistroController {
 
   async buscarUltimoRegistro() {
     const registro = await this.registroService.listarUltimoRegistro();
-    await this.registroService.atualizarRegistro()
+   
+    // nao tem como atualizar um registro se nao houver registro la.
+    // entao podemos retornar um registro vazio sem problemas
+    if (registro.length > 0) {
+      await this.registroService.atualizarRegistro() 
+    }
+    
     return { data: registro };
   }
 
@@ -53,7 +59,7 @@ export class RegistroController {
         if (registro['enviado'] === 1) {
           setTimeout(() => {
             response.end();
-          }, 1000);
+          }, 5000);
         }
       }),
       map((registro) => ({
