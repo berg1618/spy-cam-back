@@ -71,8 +71,8 @@ class Recognition:
                 data_notif = pessoa_id[0][1]
                 dataAgora = datetime.datetime.now()
                 tempo = dataAgora - data_notif
-                tempo_str = str(tempo)[2:4]
-                tempo_int = int(tempo_str)
+                tempo_str = str(tempo).split(":")
+                tempo_int = int(tempo_str[1])
 
                 if tempo_int >= 2:
                     # cadastrar de novo só depois de 10 min
@@ -92,14 +92,12 @@ class Recognition:
             pessoa_id = self.fotos_bd.verificarNotificacao()
 
             if pessoa_id[0][0] == None:
-                print('desconhecido')
-                print(pessoa_id[0][0])
-
+               
                 data_notif = pessoa_id[0][1]
                 dataAgora = datetime.datetime.now()
                 tempo = dataAgora - data_notif
-                tempo_str = str(tempo)[2:4]
-                tempo_int = int(tempo_str)
+                tempo_str = str(tempo).split(":")
+                tempo_int = int(tempo_str[1])
 
                 if tempo_int >= 2:
                     # cadastrar de novo só depois de 10 min

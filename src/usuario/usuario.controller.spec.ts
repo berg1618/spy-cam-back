@@ -3,7 +3,7 @@ import { UsuariosController } from './usuarios.controller';
 import { UsuarioService } from './usuario.services';
 import { Response } from 'express';
 
-describe('Teste classe de equivalencia UsuarioController', () => {
+describe('Teste UsuarioController', () => {
   let controller: UsuariosController;
   let service: UsuarioService;
   let res: Response;
@@ -49,7 +49,6 @@ describe('Teste classe de equivalencia UsuarioController', () => {
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith({ msg: 'usuario cadastrado' });
 
-      // a funcao de cadastrar é chamada pelo mens uma vez
       expect(service.cadastrarUser).toHaveBeenCalledTimes(1);
     });
 
@@ -66,7 +65,6 @@ describe('Teste classe de equivalencia UsuarioController', () => {
         msg: 'preencha todos os campos',
       });
 
-      // a funcao de cadastrar nao deve ser chamada
       expect(service.cadastrarUser).toHaveBeenCalledTimes(0);
     });
 
@@ -83,7 +81,6 @@ describe('Teste classe de equivalencia UsuarioController', () => {
         msg: 'preencha todos os campos',
       });
 
-      // a funcao de cadastrar nao deve ser chamada
       expect(service.cadastrarUser).toHaveBeenCalledTimes(0);
     });
 
@@ -100,7 +97,6 @@ describe('Teste classe de equivalencia UsuarioController', () => {
         msg: 'preencha todos os campos',
       });
 
-      // a funcao de cadastrar nao deve ser chamada
       expect(service.cadastrarUser).toHaveBeenCalledTimes(0);
     });
 
@@ -113,7 +109,6 @@ describe('Teste classe de equivalencia UsuarioController', () => {
         expect(err.status).toBe(500);
         expect(err).toEqual(new Error('erro no servidor'));
 
-        // a funcao de cadastrar nao deve ser chamada
         expect(service.cadastrarUser).toHaveBeenCalledTimes(0);
       }
     });

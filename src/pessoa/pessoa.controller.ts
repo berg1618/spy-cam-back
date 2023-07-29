@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   UploadedFiles,
   UseInterceptors,
@@ -12,7 +14,6 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { CurrentUser } from '../usuario/usuario.guard';
-import { Usuario } from '../usuario/entities/usuario.entity';
 import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('pessoa')
@@ -40,7 +41,7 @@ export class PessoaController {
     @Body() pessoa: Pessoa,
     @UploadedFiles()
     fotos: Array<Express.Multer.File>,
-    @CurrentUser('sub') usuario,
+    @CurrentUser('sub') usuario?,
   ) {
     let arrayFotos: string = '';
 
@@ -54,5 +55,11 @@ export class PessoaController {
   @Get()
   async listarPessoas() {
     return this.pessoaService.listarPessoas();
+  }
+
+  @Public()
+  @Delete(':pessoa_id')
+  async apagarPessoa(@Param() pessoa_id) {
+    return this.pessoaService.removerPessoa(pessoa_id);
   }
 }

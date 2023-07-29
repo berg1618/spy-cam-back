@@ -17,6 +17,7 @@ import { join } from 'path';
 
 dotenv.config();
 
+
 @Module({
   imports: [
     SequelizeModule.forRoot({
@@ -40,4 +41,4 @@ dotenv.config();
     UsuarioPessoaModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
