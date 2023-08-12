@@ -5,10 +5,15 @@ from recognition.bd import BD
 # from bd import BD
 import time
 import datetime
+from recognition.modules import countTime
+
 
 class Recognition:
     def __init__(self):
         self.result = None
+        self.processo_ativo = False
+        self.exe_processo = True
+        self.exe_processo_novamente = False
         self.fotos_bd = BD()
 
     def recognition(self, pessoa_conhecida: str, img_camera: str):
@@ -38,69 +43,84 @@ class Recognition:
         except:
             # nem sempre o metodo conseguirá reconhecer que se trata de um rosto 
             # logo de primeira. Isso pode causar um erro.
-            # usando try e except tratamos esse erro retornando 10.
-            # a ideia é que enquanto o valor de retorno for 10 ou None esse metodo
+            # usando try e except tratamos esse erro retornando None.
+            # a ideia é que enquanto o valor de retorno for None, esse metodo
             # deve ser executado, até que ele me retorne algum valor como True ou False.
 
             # so salvamos no banco se o metodo estiver me retornando um valor
-            # diferente de 10 ou None
-            self.result = 10
+            # diferente de None
+            self.result = None
 
 
-    # POR ENQUANTO PEGAR APEBAS A ULTIMA FOTO REGISTRADA
-    # DEPOIS TENTANTAR FAZER A COMPARAÇÃO COM TODOAS AS FOTOS
+   
     def for_each_photo(self, img_cam):
+        DESCONHECIDOS = []
         pessoas = self.fotos_bd.getPhotos() # [(id, nome, foto)]
-        photo = pessoas[0][2]
-        path_photo = "../" + photo[:-1]
-        
-        time.sleep(0.2)
-        self.recognition(img_cam, path_photo)
+        pessoa_id = self.fotos_bd.verificarNotificacao() # verificar ultima notificacao
+       
+        i = 0
+        t = 0
+        while i < len(pessoas):
 
-        # verificar resultado para salvar notificaçao
-        if self.result == True:
+            photo = pessoas[i][2]
+            path_photo = "../" + photo[:-1]
 
-            pessoa_id = self.fotos_bd.verificarNotificacao()
+            time.sleep(0.2)
+            self.recognition(img_cam, path_photo)
+            print("...")
 
-            # verificar se a pessoa que detectei e a mesma
-            # que acabei de registrar
-            # se ja tiver registrado essa pessoa, so a faço a
-            # nova notificação depois de 10 min 
-            if pessoa_id[0][0] == pessoas[0][0]:
+            if self.exe_processo == False:
+                break
+            
+            if self.result == True or self.result == False:
+                print(">>", self.result)
+                DESCONHECIDOS.append(self.result)
 
-                data_notif = pessoa_id[0][1]
-                dataAgora = datetime.datetime.now()
-                tempo = dataAgora - data_notif
-                tempo_str = str(tempo).split(":")
-                tempo_int = int(tempo_str[1])
+                self.exe_processo_novamente = False
 
-                if tempo_int >= 2:
-                    # cadastrar de novo só depois de 10 min
-                    self.fotos_bd.insertNotificationConhecido(
-                        f"{pessoas[0][1]} entrou no carro",
-                        pessoas[0][0]
-                    )
+                i += 1
+                t = 0
+                # self.exe_processo_novamente = False
+
+                if self.result == True:
+
+                    # verificar se a pessoa que detectei e a mesma
+                    # que acabei de registrar
+                    # se ja tiver registrado essa pessoa, so faço a
+                    # nova notificação depois de 10 min 
+                    if pessoa_id[0][0] == pessoas[i-1][0]:
+
+                        data_notif = pessoa_id[0][1]
+                       
+                        if countTime(data_notif) >= 10: # só depois de 10 min
+                            self.fotos_bd.insertNotificationConhecido(
+                                f"{pessoas[i-1][1]} entrou no carro",
+                                pessoas[i-1][0]
+                            )
+
+                    else:
+                        self.fotos_bd.insertNotificationConhecido(
+                                f"{pessoas[i-1][1]} entrou no carro",
+                                pessoas[i-1][0]
+                            )
+                
+                    break # parar o programa ao detectar a pessoa
+            
             else:
-                self.fotos_bd.insertNotificationConhecido(
-                        f"{pessoas[0][1]} entrou no carro",
-                        pessoas[0][0]
-                    )
+                # fotos meio desfocadas podem causar problemas na detecção dos pontos de reconhecimento
+                # caso esteja ocorrendo muitos erros, parar o algoritimo
+                t += 1
+                if t >= 3:
+                    self.exe_processo_novamente = True
+                    break
 
 
-        elif self.result == False:
-
-            pessoa_id = self.fotos_bd.verificarNotificacao()
-
+        if True not in DESCONHECIDOS and len(DESCONHECIDOS) > 0:
             if pessoa_id[0][0] == None:
-               
+                # verificar se nao estou cadastrando a msm coisa de novo 
+  
                 data_notif = pessoa_id[0][1]
-                dataAgora = datetime.datetime.now()
-                tempo = dataAgora - data_notif
-                tempo_str = str(tempo).split(":")
-                tempo_int = int(tempo_str[1])
-
-                if tempo_int >= 2:
-                    # cadastrar de novo só depois de 10 min
+                if countTime(data_notif) >= 10: # cadastrar de novo só depois de 10 min
 
                     self.fotos_bd.insertNotificationDesconhecido(
                         "pessoa desconhecida entrou no carro"
@@ -110,10 +130,7 @@ class Recognition:
                 self.fotos_bd.insertNotificationDesconhecido(
                         "pessoa desconhecida entrou no carro"
                     )
-
-
-        # for p in pessoas:
-        #     photo = p[1][:-1]
-        #     path_photo = "../" + photo
-        #     self.recognition(img_cam, path_photo)
-        #     print(self.result)
+           
+        # processo finalizado
+        self.processo_ativo = False # finalizar oprocesso
+        self.result = None
